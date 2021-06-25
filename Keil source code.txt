@@ -1,0 +1,43 @@
+//this prog works HC-05 bluetooth module by interfacing with 8051    
+#include<reg51.h>
+sbit m1p=P2^0;
+sbit m1n=P2^1;
+sbit m2p=P2^2;
+sbit m2n=P2^3;  //motor input connections//
+void main()
+{          unsigned char x;
+	SCON=0X50;
+	TMOD=0X20;
+	TH1=-3;
+	TR1=1;  //initialize serial communcation
+	while(1)
+	{          while(RI==0);
+		x=SBUF;
+		RI=0;
+		SBUF=x;
+		while(TI==0);
+		TI=0;
+		if(x=='f')
+		{
+			m1p=1;m1n=0; //robo moves forward
+			m2p=1;m2n=0;
+		}
+		if(x=='b')
+   {
+     m1p=0;m1n=1;  //robot moves back
+     m2p=0;m2n=1;
+   }
+   if(x=='l')
+   {
+     m1p=1;m1n=0;  //robot turns left
+     m2p=0;m2n=1;
+   }
+   if(x=='r')
+   {
+     m1p=0;m1n=1;  //robot turns right
+     m2p=1;m2n=0;
+   }
+   if(x=='s')
+   { m1p=m1n=m2p=m2n=0;
+   }
+ }
